@@ -2,209 +2,354 @@ package Snake;
 
 import java.awt.*;
 import javax.swing.*;
-import java.awt.event.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Random;
+import java.awt.Point;
+import java.util.*;
+import java.util.List;
+import java.util.Timer;
+import java.text.*;             //used for the dateformat
 
-public class Snake implements KeyListener, ActionListener, MouseListener  {
-	protected GamePanel panel1;  //instantiate frame, panel,	           
-	protected int time;              //instantiate time, myscore, snakelength(snekLength), snakehead(snekHead) int variables
-	protected int myscore;
-	protected int snekLength;
-	protected Point snekHead;
-	protected int direct;                //creating int variable that will be used for direction
-	protected Random random;             //will be used to randomise shape to collect by snake
-	protected Timer timer;
-	protected ArrayList<Point> snekbody = new ArrayList<Point>();  //creating the array
-	protected int startpoint = 12;
-	protected int area = 25;
-	protected int zeroAtStart = 0;
-	protected int snakelengthStart = 1;
-	protected int mouseclicks = 0;                 //used for mouse events later
-	protected final static int DOWN = 0;          //now int variable direct can equal 0 to mean down 
-	protected final static int UP  = 1;           // UP will always equal 1 due to public final static (done for all directions) 
-	protected final static int RIGHT = 2;
-	protected final static int LEFT = 3;
-	protected int secs; 
-	protected Point snekshape;
-	protected boolean gameover;
-	protected static Snake snake;    
-	
-	public void BeginGame()	{   
-    	gameover =! true;                      //gameover isn't true at game start
-	    snekHead = new Point(startpoint, startpoint);          //starting point of the snake
-	    timer = new Timer(25, this);  ///
-	    time = zeroAtStart;                              //time and myscore are 0 at game start 
-		myscore = zeroAtStart;
-		secs = zeroAtStart;
-		snekLength = snakelengthStart;                        //snake will start with a tail of length 1
-		direct = 2;                     //because protected final static int RIGHT = 2,  when direct equal 2 direction is RIGHT 
-		random = new Random();
-		snekbody.clear();                         
-		snekshape = new Point(random.nextInt(area), random.nextInt(area));
-		timer.start();
-	}
-	
-	
-	public Snake()  {      //constructor   	
-		JFrame frame1;		
-		frame1 = new JFrame();                     //create a new frame and add title, panel
-		frame1.addKeyListener(this);                              //////
-		frame1.setTitle("SNAKE GAME by C Skillman");
-		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //game will end and application will close when exit window
-		frame1.setSize(416, 440);                          //sets size of window of game
-		frame1.add(panel1 = new GamePanel());         //code for GamePanel exists in the other class file
-		frame1.addMouseListener(this);
-		frame1.addKeyListener(this);
-		frame1.setVisible(true);                      //allows the frame to be seen instead of just existing
-		BeginGame();                                  //final thing to do, call BeginGame to start the game
-	}
-	
+public class GamePanel extends JPanel
+{	
+	protected int s1, s2, s3, s4 ,s5;        //instantiating  the variable that will hold the top ten scores
+	protected int s6, s7, s8, s9, s10;
+	protected int s1_24, s2_24, s3_24, s4_24 ,s5_24; //instantiating the variable that will hold the top ten scores in the last 24 hours
+	protected int s6_24, s7_24, s8_24, s9_24, s10_24;
+	protected String score;                        //will be used to show score at end and write to txt files
+	protected String times;
+	protected BufferedWriter writer = null;
+	protected FileWriter writeFile = null;
+	protected BufferedWriter writer2 = null;
+	protected FileWriter writeFile2 = null;
+		
+	protected void paintComponent(Graphics g) 
+	{
+		super.paintComponent(g);
+		Snake snake = Snake.snake;
 
-	public static void main(String[] args)	{
-		System.out.println("Game Start");
-		snake = new Snake(); 
-	}
-	
-	public void keyReleased(KeyEvent e) {} //arrow keys do not need to be held down to continue in one direct so this method can be left empty                  
-	public void keyTyped(KeyEvent e)  {}  //must be inherited to avoid errors but does not need to contain anything
-	public void keyPressed(KeyEvent k)	{      //events that will happen when arrow keys are pressed
-		int keycode = k.getKeyCode();
-        if (direct!= 0  && (keycode ==KeyEvent.VK_UP)  )           //if up arrow on keyboard pressed then snake object go up
-		{                                             //having direct!= 0 makes sure we can't go down from moving up
-			direct = 1;                                      //because public final static int UP = 1,  when direct equal 1 direction is UP
-		}
-        if (direct != 1 && (keycode == KeyEvent.VK_DOWN)  )          //if down arrow on keyboard pressed then snake object go down
-		{
-			direct = 0;                                      //because public final static int DOWN = 0,  when direct equal 0 direction is DOWN
-		}
-        if (direct != 3 && (keycode == KeyEvent.VK_RIGHT) )     //if right arrow on keyboard pressed then snake object go right
-		{
-			direct = 2;                                    //because public final static int RIGHT = 2,  when direct equal 2 direction is RIGHT
-		}
-        if (direct != 2 && (keycode == KeyEvent.VK_LEFT) )      //if left arrow on keyboard pressed then snake object go left
-		{
-			direct = 3;                                   //because public final static int LEFT = 3,  when direct equal 3 direction is LEFT
-		}
-  
-
-	}
-	
-	public void actionPerformed(ActionEvent A)	{
-		
-		panel1.repaint();  //gets component to repaint itself  // used to cause paint() to be invoked
-		
-		if (!gameover) {    
-		boolean bool1;
-		
-		
-		//REFERENCE
-		//IDEAS FOR IF STATEMENTS in this method HERE TAKEN FROM     https://www.youtube.com/watch?v=S_n3lryyGZM    spoken about in report
-		secs = secs + 25;   //able to control the speed of the timer & snake
-		if (secs % 10 == 0 && !gameover && snekHead != null ) //every %of a second everything in if bracket is called (assuming all conditions true too)
-		{	time = time + 1;    //allows the timer to be incremented by 1, allows timer to work
-			snekbody.add(new Point(snekHead.x, snekHead.y));  //adds new oval shape to end of snake  			
-			if (snekLength<snekbody.size())
-			{snekbody.remove(0);        //removes the end of snake oval after snake has moved off of that point
-			}
-			
-		
-			if (direct == 1 && direct != 0 && direct != 2 && direct != 3)   
-			{    
-	 
-			if (OverTouchTail(snekHead.x, snekHead.y - 1) && 0 <= snekHead.y - 1 )  //if snake goes beyond horizontal 0 then gameover occurs  
-			{ snekHead = new Point(snekHead.x, snekHead.y - 1);    
-			}
-			else
-			{bool1 = true;
-			gameover = bool1;               
-			}
-			}
-			
-			if (direct == 3 && direct != 0 && direct != 1 && direct != 2)  //because public final static int LEFT = 3,  when direct equal 3 direction is LEFT
-			{
-				if (OverTouchTail(snekHead.x - 1, snekHead.y) && 0 <= snekHead.x - 1 ) //at 0point(vertically) if snake hits it, gameover will occur (hit left border)
-				{snekHead = new Point(snekHead.x - 1, snekHead.y);
-				}
-				else
-				{bool1 = true;
-				gameover = bool1;
-				}
-			}
-
-			if (direct == 2 && direct != 0 && direct != 1 && direct != 3)  
-			{   //only affect right direction (right movements)
-				if (OverTouchTail(snekHead.x + 1, snekHead.y) && 39 >= snekHead.x + 1 )  //at 39point(vertically) if snake hits it, gameover will occur (hit right border)
-				{snekHead = new Point(snekHead.x + 1, snekHead.y);
-				}
-				else
-				{bool1 = true;
-				gameover = bool1;
-				}
-			}
-			
-			
-					
-			if (direct == 0 && direct != 1 && direct != 2 && direct != 3)      
-			{
-				if (OverTouchTail(snekHead.x, snekHead.y + 1) && snekHead.y + 1 <= 39)
-				{
-					snekHead = new Point(snekHead.x, snekHead.y + 1);
-				}
-				else {
-				bool1 = true;
-				gameover = bool1;
-				}
-			}
-
-			if (snekshape == null)
-			{
+		g.setColor(Color.black);                 //colour background roundrect
+		g.fillRoundRect(0, 0, 400, 400, 25, 50);  //position & size of roundrect
 				
-			}
-			else {
-				if (snekHead.equals(snekshape))	{
-			snekshape.setLocation(random.nextInt(32), random.nextInt(32));  //shape will appear randomly left of vertical point 51 and above horizontal point 44 so it does not appear out of bounds
-			myscore = myscore + 25;                  //gain 25 points when a shape is collected by snake
-			snekLength = snekLength + 1;
-			}
-			}
-		}
-		}
+		//20 horizontal top border of 20 (height 20 and width 20) squares
+	
 		
-	}
-	//when mouse clicked increments by 1
-	public void mouseClicked(MouseEvent e) {
-	 mouseclicks = mouseclicks + 1;   }
-    public void mousePressed(MouseEvent E) {}	
-	public void mouseEntered(MouseEvent E) {}
-	public void mouseExited(MouseEvent E) {}
-	public void mouseReleased(MouseEvent E) {}
+		
+		
+	
+		g.setColor(Color.cyan);                       //sets the colour of the snake's head
+		g.fillOval(snake.snekHead.x * 10, snake.snekHead.y * 10, 10, 10);
+		
+        //sets the colour, font and position of the text shown at the bottom on the game
+		g.setColor(Color.black);
+		g.setFont(new Font("Ariel", Font.BOLD, 15));
+		g.drawString(""+"Time: "+snake.time/25+"     "+"    Length: "+snake.snekLength+
+		"      Score: "+snake.myscore + "     Clicks: " + snake.mouseclicks, 20, 396);
 
+		
+		
+		
+		
+		
+		g.setColor(Color.BLUE);                //colour of the snake
+		for (int i = 0; i < (snake.snekbody).size(); i++) {   
+		    Point pos = (snake.snekbody).get(i);
 	
-	public boolean OverTouchTail(int H, int V)  { //allows gameover if snake touches its tail
-		//REFERENCE
-	//IDEA for how to do some of this part gotten from    https://www.youtube.com/watch?v=S_n3lryyGZM    spoken about in report
+		g.fillOval(pos.x * 10, pos.y * 10, 10, 10);  //position include .x and .y as the snake and shape move and will not be in fixed positions
+		} 
 		
+		//needs last so the shape appears in front of anything on the board so we can see it
+		g.setColor(Color.red);                         //sets colour of shape to be collected 
+		g.fillOval(snake.snekshape.x * 10, snake.snekshape.y * 10, 10, 10);  //sets (unfiixed) position and size
+
 		
-		boolean bool2;
-		for (int a = 0; a < snekbody.size(); a = a+1) {   //gameover for all snake body parts
-			    Point pos = snekbody.get(a);
-			    
-			//game will end if snake goes to point where tail is    
-			if (!gameover && pos.equals(new Point(H, V )))       
-				                                       
-			{
-			bool2 = false;
-			return bool2;
-			}
+
+		if (snake.gameover)       
+			                              //font, colour, size and position of "YOU LOSE" string
+		{   score = Integer.toString(snake.myscore); 
+		    times = Integer.toString(snake.time/25);
+			g.setColor(Color.white);                 //colour of front roundrect
+			g.fillRoundRect(50, 50, 300, 300, 25, 50);
+			g.setFont(new Font("COMIC SANS", Font.BOLD, 18));
+		    g.setColor(Color.darkGray);	
+			g.drawString("YOU LOSE", 150, 65);
 			
-		}
-		bool2 = true;
-		return bool2;
-	}
+						
+			
+			g.drawString("Your Score: " + score + "    " + "Your Time: " + times, 50, 90);
+			
+			//the next block of code will print on screen the top ten scores of all time
+			g.setFont(new Font("COMIC SANS", Font.BOLD, 15));
+		    g.setColor(Color.black);	
+			g.drawString("Highscores: ", 50, 120);
+			g.drawString(" 1) " + s1, 70, 140);
+			g.drawString(" 2) " + s2, 70, 160);
+			g.drawString(" 3) " + s3, 70, 180);
+			g.drawString(" 4) " + s4, 70, 200);
+			g.drawString(" 5) " + s5, 70, 220);
+			g.drawString(" 6) " + s6, 70, 240);
+			g.drawString(" 7) " + s7, 70, 260);
+			g.drawString(" 8) " + s8, 70, 280);
+			g.drawString(" 9) " + s9, 70, 300);
+			g.drawString("10) " + s10,70, 320);
+			
+			g.drawString("24 Hour Highscores: ", 180, 120);
+			g.drawString(" 1) " + s1_24, 270, 140);
+			g.drawString(" 2) " + s2_24, 270, 160);
+			g.drawString(" 3) " + s3_24, 270, 180);
+			g.drawString(" 4) " + s4_24, 270, 200);
+			g.drawString(" 5) " + s5_24, 270, 220);
+			g.drawString(" 6) " + s6_24, 270, 240);
+			g.drawString(" 7) " + s7_24, 270, 260);
+			g.drawString(" 8) " + s8_24, 270, 280);
+			g.drawString(" 9) " + s9_24, 270, 300);
+			g.drawString("10) " + s10_24,270, 320);
+			
+			writeScore();
+			writeScore24hour();
+			getScore();
+			getScore24hour();
+			 
+			    	
+			    }
+			    	
+			} 
 	
-    
+
+	private void writeScore() {  //method will write to new or existing files score at endgame
+		                                                //location of file
+			String textfile = "C:\\Users\\chloe\\workspace\\Java Project\\src\\Snake\\scoreboard.txt";
+              try {
+					
+					File file1 = new File(textfile);
+					
+					if (!file1.exists()) {
+						file1.createNewFile();  //if the file does not exist then scoreboard.txt will be created in that location
+					}
+
+							
+					if (writeFile == null) {   //code to append to the text file
+					
+					boolean	bool3 = true;
+					writeFile = new FileWriter(file1.getAbsoluteFile(), bool3);
+					writer = new BufferedWriter(writeFile);
+					
+
+					writer.write(score);
+					writer.newLine();                 //so each score is written to a new line 
+					System.out.println("Alltime score submitted.");   
+					
+					}
+
+				} catch (Exception e) {
+
+					System.out.println("Exception Caught"); 
+
+				} 
+				
+				finally {
+					
+						try {
+
+						if (writer != null)
+							writer.close();
+
+						if (writeFile != null)
+							writeFile.close();
+
+					} catch (IOException E) {
+
+						System.out.println("Exception Caught");
+				  }
+				}
+
+			}
+	
+	private void writeScore24hour() { //method will write to new or existing files score at endgame to a different text file
 		
-}	
+		String textfile2 = "C:\\Users\\chloe\\workspace\\Java Project\\src\\Snake\\scoreboard24hour.txt";
+          try {
+				//creates file if it doesn't exist already
+				File file2 = new File(textfile2);
+				
+				if (!file2.exists()) {
+					file2.createNewFile();  
+				}
+
+						
+				if (writeFile2 == null) {     //code to append to the text file
+				
+				boolean	bool4 = true;
+				writeFile2 = new FileWriter(file2.getAbsoluteFile(), bool4);
+				writer2 = new BufferedWriter(writeFile2);
+				
+
+				writer2.write(score);
+				writer2.newLine();                 //so each score is written to a new line 
+				System.out.println("Game End"); 
+				System.out.println("24 hour score submitted.");   
+				
+				//creating the dates task will be scheduled to
+				DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			    Date date1 = dateFormatter.parse("2017-12-12 15:00:00");
+			    Date date2 = dateFormatter.parse("2017-12-13 15:00:00");
+			    Date date3 = dateFormatter.parse("2017-12-14 15:00:00");
+			    Date date4 = dateFormatter.parse("2017-12-15 15:00:00");
+			    Date date5 = dateFormatter.parse("2017-12-16 15:00:00");
+			    Date date6 = dateFormatter.parse("2017-12-17 15:00:00");
+			    Date date7 = dateFormatter.parse("2017-12-18 15:00:00");
+
+			    //scheduling the task (for 7 days)
+			    Timer timer2 = new Timer();
+			    timer2.schedule(delete24hourscore(),date1);
+			    timer2.schedule(delete24hourscore(),date2); 
+			    timer2.schedule(delete24hourscore(),date3); 
+			    timer2.schedule(delete24hourscore(),date4); 
+			    timer2.schedule(delete24hourscore(),date5);
+			    timer2.schedule(delete24hourscore(),date6);
+			    timer2.schedule(delete24hourscore(),date7);
+			    
+			}
+
+			} catch (Exception e) {
+
+				System.out.println("Exception Caught");
+				
+
+			} 
+			
+			finally {
+			
+					try {
+
+					if (writer2 != null)
+						writer2.close();
+
+					if (writeFile2 != null)
+						writeFile2.close();
+
+				} catch (IOException E) {
+
+					System.out.println("Exception Caught");
+			  }
+			}
+
+		}
 	
+	
+	//this method will delete 24hour scoreboard file every 24 hours
+	private TimerTask delete24hourscore() {
+		String textfile2 = "C:\\Users\\chloe\\workspace\\Java Project\\src\\Snake\\scoreboard24hour.txt";
+		File file2 = new File(textfile2);
+		
+		if (file2.exists()) {
+			file2.delete();
+		}
+		return null;
+	}
+
+
+
+	public void getScore() {  //this method reads the text file and sort into descending order after pputting them in an array
+
+		{
+        try {
+			
+	        List<Integer> highscores = new ArrayList<Integer>();  //creating an arrayList to hold the scores from the text file
+	        //reads the correct file full of the scores                   
+	        BufferedReader reader1 = new BufferedReader(new FileReader(      //change this location to a place on the pc this java file is being run on
+	        		"C:\\\\Users\\\\chloe\\\\workspace\\\\Java Project\\\\src\\\\Snake\\\\scoreboard.txt"));
+	        String lines = null;
+	        String nullvalue = null;
+	        
+	        // splits the individual scores and converts strings in the text file to int
+	         while ( (lines = reader1.readLine()) != nullvalue ) {
+	             String []strhighscores = lines.split(" ");
+	             for (int j = 0; j < strhighscores.length; j = j+1) { 
+
+             	 String strNumb = strhighscores[j];
+             	 highscores.add(Integer.parseInt(strNumb));
+
+              }
+	             
+
+	                       
+	         }   
+	         reader1.close();
+	         Collections.sort(highscores);         //sorts scores into ascending order
+	         Collections.reverse(highscores);      //reverses the order so highest scores at top
+	         s1 = highscores.get(0);
+	         s2 = highscores.get(1);
+	         s3 = highscores.get(2);
+	         s4 = highscores.get(3);
+	         s5 = highscores.get(4);
+	         s6 = highscores.get(5);
+	         s7 = highscores.get(6);
+	         s8 = highscores.get(7);
+	         s9 = highscores.get(8);
+	         s10 = highscores.get(9);
+
+	         
+			}
+
+	        catch (Exception lessthantenscores) {
+	        	//this exception is caught if there is less than 10 scores
+	        	//nothing will print to tell you the exception is caught.
+			} 
+        
+	     }
+
+  }
+
+	public void getScore24hour() {  //this method reads
+
+		{
+        try {
+			
+	        List<Integer> highscores2 = new ArrayList<Integer>();  //creating an arrayList to hold the scores from the text file
+	        //reads the correct file full of the scores                   
+	        BufferedReader reader2 = new BufferedReader(new FileReader(      //change this location to a place on the pc this java file is being run on
+	        		"C:\\Users\\chloe\\workspace\\Java Project\\src\\Snake\\scoreboard24hour.txt"));
+	        String lines2 = null;
+	        String nullvalue2 = null;
+	        
+	        // splits the individual scores and converts strings in the text file to int
+	         while ( (lines2 = reader2.readLine()) != nullvalue2 ) {
+	             String []strhighscores2 = lines2.split(" ");
+	             for (int o = 0; o < strhighscores2.length; o = o+1) { 
+
+             	 String strNumb2 = strhighscores2[o];
+             	 highscores2.add(Integer.parseInt(strNumb2));
+
+              }
+	             
+
+	                       
+	         }   
+	         reader2.close();
+	         Collections.sort(highscores2);         //sorts scores into ascending order
+	         Collections.reverse(highscores2);      //reverses the order so highest scores at top
+	         s1_24 = highscores2.get(0);
+	         s2_24 = highscores2.get(1);
+	         s3_24 = highscores2.get(2);
+	         s4_24 = highscores2.get(3);
+	         s5_24 = highscores2.get(4);
+	         s6_24 = highscores2.get(5);
+	         s7_24 = highscores2.get(6);
+	         s8_24 = highscores2.get(7);
+	         s9_24 = highscores2.get(8);
+	         s10_24 = highscores2.get(9);
+
+	         
+			}
+
+	        catch (Exception lessthantenscores) {
+	        	//this exception is caught if there is less than 10 scores
+	        	//nothing will print to tell you the exception is caught.
+			} 
+        
+	     }
+
+  }
+	
+	
+}
