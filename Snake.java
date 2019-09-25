@@ -51,9 +51,9 @@ public class Snake implements KeyListener, ActionListener, MouseListener  {
 		JFrame frame1;		
 		frame1 = new JFrame();                     //create a new frame and add title, panel
 		frame1.addKeyListener(this);                              //////
-		frame1.setTitle("SNAKE GAME by C Skillman");
+		frame1.setTitle("SNAKE by C Skillman");
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //game will end and application will close when exit window
-		frame1.setSize(416, 440);                          //sets size of window of game
+		frame1.setSize(435, 460);                          //sets size of window of game
 		frame1.add(panel1 = new GamePanel());         //code for GamePanel exists in the other class file
 		frame1.addMouseListener(this);
 		frame1.addKeyListener(this);
@@ -110,10 +110,10 @@ public class Snake implements KeyListener, ActionListener, MouseListener  {
 			}
 			
 		
-			if (direct == 1 && direct != 0 && direct != 2 && direct != 3)   
+			if (direct == 1 && direct != 2 && direct != 2 && direct != 3)   
 			{    
 	 
-			if (OverTouchTail(snekHead.x, snekHead.y - 1) && 0 <= snekHead.y - 1 )  //if snake goes beyond horizontal 0 then gameover occurs  
+			if (OverTouchTail(snekHead.x, snekHead.y - 1) && 2 <= snekHead.y - 1 )  //if snake goes beyond horizontal 2 then gameover occurs  
 			{ snekHead = new Point(snekHead.x, snekHead.y - 1);    
 			}
 			else
@@ -124,7 +124,7 @@ public class Snake implements KeyListener, ActionListener, MouseListener  {
 			
 			if (direct == 3 && direct != 0 && direct != 1 && direct != 2)  //because public final static int LEFT = 3,  when direct equal 3 direction is LEFT
 			{
-				if (OverTouchTail(snekHead.x - 1, snekHead.y) && 0 <= snekHead.x - 1 ) //at 0point(vertically) if snake hits it, gameover will occur (hit left border)
+				if (OverTouchTail(snekHead.x - 1, snekHead.y) && 2 <= snekHead.x - 1 ) //at 2 point(vertically) if snake hits it, gameover will occur (hit left border)
 				{snekHead = new Point(snekHead.x - 1, snekHead.y);
 				}
 				else
@@ -164,7 +164,8 @@ public class Snake implements KeyListener, ActionListener, MouseListener  {
 			}
 			else {
 				if (snekHead.equals(snekshape))	{
-			snekshape.setLocation(random.nextInt(32), random.nextInt(32));  //shape will appear randomly left of vertical point 51 and above horizontal point 44 so it does not appear out of bounds
+			int x = 4; //added so the score object won't appear of the left or top border
+			snekshape.setLocation(random.nextInt(28)+x, random.nextInt(28)+x);  //shape will appear randomly left of vertical point 51 and above horizontal point 44 so it does not appear out of bounds
 			myscore = myscore + 25;                  //gain 25 points when a shape is collected by snake
 			snekLength = snekLength + 1;
 			}
@@ -204,4 +205,6 @@ public class Snake implements KeyListener, ActionListener, MouseListener  {
 		return bool2;
 	}
 	
+    
+		
 }
