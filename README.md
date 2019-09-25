@@ -1,6 +1,6 @@
 ## Snake Java Game
 
-My first game in java
+My first game in java, created in December 2017.
 
 ## Getting Started
 
@@ -13,7 +13,6 @@ If your snake hits its tail, you will lose.
 Collect the fruit to increase your score. This will also increase the length of your snake by 1.
 Try to get the highest score you can before filling up the board.
 When you have recieved a game over you will see your score and all previous scores.
-
 
 ### Prerequisites
 
