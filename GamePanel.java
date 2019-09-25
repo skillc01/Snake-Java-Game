@@ -106,6 +106,7 @@ public class GamePanel extends JPanel
 		//needs last so the shape appears in front of anything on the board so we can see it
 		g.setColor(Color.red);                         //sets colour of shape to be collected 
 		g.fillOval(snake.snekshape.x * 10, snake.snekshape.y * 10, 10, 10);  //sets (unfiixed) position and size
+		
 
 		
 

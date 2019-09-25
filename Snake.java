@@ -164,8 +164,8 @@ public class Snake implements KeyListener, ActionListener, MouseListener  {
 			}
 			else {
 				if (snekHead.equals(snekshape))	{
-			int x = 4; //added so the score object won't appear of the left or top border
-			snekshape.setLocation(random.nextInt(28)+x, random.nextInt(28)+x);  //shape will appear randomly left of vertical point 51 and above horizontal point 44 so it does not appear out of bounds
+			int x = 6; //added so the score object won't appear of the left or top border
+			snekshape.setLocation(random.nextInt(24+x)+x, random.nextInt(24+x)+x);  //shape will appear randomly left of vertical point 51 and above horizontal point 44 so it does not appear out of bounds
 			myscore = myscore + 25;                  //gain 25 points when a shape is collected by snake
 			snekLength = snekLength + 1;
 			}
