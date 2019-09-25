@@ -28,19 +28,65 @@ public class GamePanel extends JPanel
 		Snake snake = Snake.snake;
 
 		g.setColor(Color.black);                 //colour background roundrect
-		g.fillRoundRect(0, 0, 400, 400, 25, 50);  //position & size of roundrect
+		g.fillRect(0, 0, 400, 400);  //position & size of rect
 				
 		//20 horizontal top border of 20 (height 20 and width 20) squares
+		
+			
+		//top line of GRAY blocks (every other block)
+		for (int x = 0; x < 400; x=x+40) {
+			g.setColor(Color.GRAY);  
+			g.fillRect(x+20, 0, 20, 20);   
+        } 
+		
+		//top line of DARK_GRAY blocks (every other block)
+		for (int x = 0; x < 400; x=x+40) {
+			g.setColor(Color.DARK_GRAY);  
+			g.fillRect(x, 0, 20, 20);   
+        } 
+		
+		//left line of GRAY blocks (every other block)
+		for (int x = 0; x < 400; x=x+40) {
+			g.setColor(Color.GRAY);  
+			g.fillRect(0, x+20, 20, 20);   
+        } 
+				
+		//left line of DARK_GRAY blocks (every other block)
+		for (int x = 0; x < 400; x=x+40) {
+			g.setColor(Color.DARK_GRAY);  
+			g.fillRect(0, x, 20, 20);   
+	    } 
+					
+		//bottom line of GRAY blocks (every other block)
+		for (int x = 0; x < 400; x=x+40) {
+			g.setColor(Color.GRAY);  
+			g.fillRect(x+20, 400, 20, 20);   
+		 } 
+		
+		//bottom line of DARK_GRAY blocks (every other block)
+		for (int x = 0; x < 410; x=x+40) {
+			g.setColor(Color.DARK_GRAY);  
+			g.fillRect(x, 400, 20, 20);   
+		} 
+						
+		//right line of GRAY blocks (every other block)
+		for (int x = 0; x < 400; x=x+40) {
+			g.setColor(Color.GRAY);  
+			g.fillRect(400, x+20, 20, 20);   
+	    } 
+				
+		//right line of DARK_GRAY blocks (every other block)
+		for (int x = 0; x < 400; x=x+40) {
+			g.setColor(Color.DARK_GRAY);  
+			g.fillRect(400, x, 20, 20);   
+        } 	
+		
 	
-		
-		
-		
-	
-		g.setColor(Color.cyan);                       //sets the colour of the snake's head
+		g.setColor(Color.magenta);                       //sets the colour of the snake's head
 		g.fillOval(snake.snekHead.x * 10, snake.snekHead.y * 10, 10, 10);
 		
         //sets the colour, font and position of the text shown at the bottom on the game
-		g.setColor(Color.black);
+		g.setColor(Color.white);
 		g.setFont(new Font("Ariel", Font.BOLD, 15));
 		g.drawString(""+"Time: "+snake.time/25+"     "+"    Length: "+snake.snekLength+
 		"      Score: "+snake.myscore + "     Clicks: " + snake.mouseclicks, 20, 396);
@@ -50,7 +96,7 @@ public class GamePanel extends JPanel
 		
 		
 		
-		g.setColor(Color.BLUE);                //colour of the snake
+		g.setColor(Color.magenta);                //colour of the snake
 		for (int i = 0; i < (snake.snekbody).size(); i++) {   
 		    Point pos = (snake.snekbody).get(i);
 	
@@ -67,47 +113,47 @@ public class GamePanel extends JPanel
 			                              //font, colour, size and position of "YOU LOSE" string
 		{   score = Integer.toString(snake.myscore); 
 		    times = Integer.toString(snake.time/25);
-			g.setColor(Color.white);                 //colour of front roundrect
-			g.fillRoundRect(50, 50, 300, 300, 25, 50);
+			g.setColor(Color.GRAY);                 //colour of front roundrect
+			g.fillRoundRect(60, 60, 300, 300, 25, 50);
 			g.setFont(new Font("COMIC SANS", Font.BOLD, 18));
-		    g.setColor(Color.darkGray);	
-			g.drawString("YOU LOSE", 150, 65);
+		    g.setColor(Color.white);	
+			g.drawString("YOU LOSE", 160, 75);
 			
 						
 			
-			g.drawString("Your Score: " + score + "    " + "Your Time: " + times, 50, 90);
+			g.drawString("Your Score:" + score + "  " + "Your Time:" + times, 75, 100);
 			
 			//the next block of code will print on screen the top ten scores of all time
 			g.setFont(new Font("COMIC SANS", Font.BOLD, 15));
-		    g.setColor(Color.black);	
-			g.drawString("Highscores: ", 50, 120);
-			g.drawString(" 1) " + s1, 70, 140);
-			g.drawString(" 2) " + s2, 70, 160);
-			g.drawString(" 3) " + s3, 70, 180);
-			g.drawString(" 4) " + s4, 70, 200);
-			g.drawString(" 5) " + s5, 70, 220);
-			g.drawString(" 6) " + s6, 70, 240);
-			g.drawString(" 7) " + s7, 70, 260);
-			g.drawString(" 8) " + s8, 70, 280);
-			g.drawString(" 9) " + s9, 70, 300);
-			g.drawString("10) " + s10,70, 320);
+		    g.setColor(Color.white);	
+			g.drawString("Highscores: ", 60, 130);
+			g.drawString(" 1) " + s1, 80, 150);
+			g.drawString(" 2) " + s2, 80, 170);
+			g.drawString(" 3) " + s3, 80, 190);
+			g.drawString(" 4) " + s4, 80, 210);
+			g.drawString(" 5) " + s5, 80, 230);
+			g.drawString(" 6) " + s6, 80, 250);
+			g.drawString(" 7) " + s7, 80, 270);
+			g.drawString(" 8) " + s8, 80, 290);
+			g.drawString(" 9) " + s9, 80, 310);
+			g.drawString("10) " + s10,80, 330);
 			
-			g.drawString("24 Hour Highscores: ", 180, 120);
-			g.drawString(" 1) " + s1_24, 270, 140);
-			g.drawString(" 2) " + s2_24, 270, 160);
-			g.drawString(" 3) " + s3_24, 270, 180);
-			g.drawString(" 4) " + s4_24, 270, 200);
-			g.drawString(" 5) " + s5_24, 270, 220);
-			g.drawString(" 6) " + s6_24, 270, 240);
-			g.drawString(" 7) " + s7_24, 270, 260);
-			g.drawString(" 8) " + s8_24, 270, 280);
-			g.drawString(" 9) " + s9_24, 270, 300);
-			g.drawString("10) " + s10_24,270, 320);
+			g.drawString("Monthly Highscores: ", 190, 130);
+			g.drawString(" 1) " + s1_24, 280, 150);
+			g.drawString(" 2) " + s2_24, 280, 170);
+			g.drawString(" 3) " + s3_24, 280, 190);
+			g.drawString(" 4) " + s4_24, 280, 210);
+			g.drawString(" 5) " + s5_24, 280, 230);
+			g.drawString(" 6) " + s6_24, 280, 250);
+			g.drawString(" 7) " + s7_24, 280, 270);
+			g.drawString(" 8) " + s8_24, 280, 290);
+			g.drawString(" 9) " + s9_24, 280, 310);
+			g.drawString("10) " + s10_24,280, 330);
 			
 			writeScore();
-			writeScore24hour();
+			writeScoremonth();
 			getScore();
-			getScore24hour();
+			getScoremonth();
 			 
 			    	
 			    }
@@ -164,9 +210,9 @@ public class GamePanel extends JPanel
 
 			}
 	
-	private void writeScore24hour() { //method will write to new or existing files score at endgame to a different text file
+	private void writeScoremonth() { //method will write to new or existing files score at endgame to a different text file
 		
-		String textfile2 = "C:\\Users\\chloe\\workspace\\Java Project\\src\\Snake\\scoreboard24hour.txt";
+		String textfile2 = "C:\\Users\\chloe\\workspace\\Java Project\\src\\Snake\\scoreboardmonth.txt";
           try {
 				//creates file if it doesn't exist already
 				File file2 = new File(textfile2);
@@ -186,27 +232,27 @@ public class GamePanel extends JPanel
 				writer2.write(score);
 				writer2.newLine();                 //so each score is written to a new line 
 				System.out.println("Game End"); 
-				System.out.println("24 hour score submitted.");   
+				System.out.println("Monthly score submitted.");   
 				
 				//creating the dates task will be scheduled to
 				DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			    Date date1 = dateFormatter.parse("2017-12-12 15:00:00");
-			    Date date2 = dateFormatter.parse("2017-12-13 15:00:00");
-			    Date date3 = dateFormatter.parse("2017-12-14 15:00:00");
-			    Date date4 = dateFormatter.parse("2017-12-15 15:00:00");
-			    Date date5 = dateFormatter.parse("2017-12-16 15:00:00");
-			    Date date6 = dateFormatter.parse("2017-12-17 15:00:00");
-			    Date date7 = dateFormatter.parse("2017-12-18 15:00:00");
+			    Date date1 = dateFormatter.parse("2019-09-01 15:00:00");
+			    Date date2 = dateFormatter.parse("2019-10-01 15:00:00");
+			    Date date3 = dateFormatter.parse("2019-11-01 15:00:00");
+			    Date date4 = dateFormatter.parse("2019-12-01 15:00:00");
+			    Date date5 = dateFormatter.parse("2020-01-01 15:00:00");
+			    Date date6 = dateFormatter.parse("2020-02-01 15:00:00");
+			    Date date7 = dateFormatter.parse("2020-03-01 15:00:00");
 
 			    //scheduling the task (for 7 days)
 			    Timer timer2 = new Timer();
-			    timer2.schedule(delete24hourscore(),date1);
-			    timer2.schedule(delete24hourscore(),date2); 
-			    timer2.schedule(delete24hourscore(),date3); 
-			    timer2.schedule(delete24hourscore(),date4); 
-			    timer2.schedule(delete24hourscore(),date5);
-			    timer2.schedule(delete24hourscore(),date6);
-			    timer2.schedule(delete24hourscore(),date7);
+			    timer2.schedule(deletemonthscore(),date1);
+			    timer2.schedule(deletemonthscore(),date2); 
+			    timer2.schedule(deletemonthscore(),date3); 
+			    timer2.schedule(deletemonthscore(),date4); 
+			    timer2.schedule(deletemonthscore(),date5);
+			    timer2.schedule(deletemonthscore(),date6);
+			    timer2.schedule(deletemonthscore(),date7);
 			    
 			}
 
@@ -236,9 +282,9 @@ public class GamePanel extends JPanel
 		}
 	
 	
-	//this method will delete 24hour scoreboard file every 24 hours
-	private TimerTask delete24hourscore() {
-		String textfile2 = "C:\\Users\\chloe\\workspace\\Java Project\\src\\Snake\\scoreboard24hour.txt";
+	//this method will delete month scoreboard file every 24 hours
+	private TimerTask deletemonthscore() {
+		String textfile2 = "C:\\Users\\chloe\\workspace\\Java Project\\src\\Snake\\scoreboardmonth.txt";
 		File file2 = new File(textfile2);
 		
 		if (file2.exists()) {
@@ -300,7 +346,7 @@ public class GamePanel extends JPanel
 
   }
 
-	public void getScore24hour() {  //this method reads
+	public void getScoremonth() {  //this method reads
 
 		{
         try {
@@ -308,7 +354,7 @@ public class GamePanel extends JPanel
 	        List<Integer> highscores2 = new ArrayList<Integer>();  //creating an arrayList to hold the scores from the text file
 	        //reads the correct file full of the scores                   
 	        BufferedReader reader2 = new BufferedReader(new FileReader(      //change this location to a place on the pc this java file is being run on
-	        		"C:\\Users\\chloe\\workspace\\Java Project\\src\\Snake\\scoreboard24hour.txt"));
+	        		"C:\\Users\\chloe\\workspace\\Java Project\\src\\Snake\\scoreboardmonth.txt"));
 	        String lines2 = null;
 	        String nullvalue2 = null;
 	        
