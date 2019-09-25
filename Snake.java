@@ -51,7 +51,7 @@ public class Snake implements KeyListener, ActionListener, MouseListener  {
 		JFrame frame1;		
 		frame1 = new JFrame();                     //create a new frame and add title, panel
 		frame1.addKeyListener(this);                              //////
-		frame1.setTitle("SNAKE by Chloe Skillman -Reg no. 1601341");
+		frame1.setTitle("SNAKE GAME by C Skillman");
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //game will end and application will close when exit window
 		frame1.setSize(416, 440);                          //sets size of window of game
 		frame1.add(panel1 = new GamePanel());         //code for GamePanel exists in the other class file
@@ -204,6 +204,4 @@ public class Snake implements KeyListener, ActionListener, MouseListener  {
 		return bool2;
 	}
 	
-    
-		
 }
