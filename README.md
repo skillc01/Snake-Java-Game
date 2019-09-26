@@ -29,7 +29,7 @@ Will work with previous java version also.
 
 * [Java](https://www.java.com/en/download/) 
 
-## Screenshots and video
+## Screenshots
 
 Draft 
 
